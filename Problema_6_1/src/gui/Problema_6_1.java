@@ -1,7 +1,7 @@
 package gui;
 
 import java.awt.EventQueue;
-
+import semana_06.ArregloEdades;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -14,9 +14,10 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.UIManager;
 
 public class Problema_6_1 extends JFrame implements ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
@@ -37,10 +38,10 @@ public class Problema_6_1 extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					Problema_6_1 frame = new Problema_6_1();
 					frame.setVisible(true);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -67,7 +68,7 @@ public class Problema_6_1 extends JFrame implements ActionListener {
 		txtEdad.setBounds(66, 10, 86, 23);
 		contentPane.add(txtEdad);
 		txtEdad.setColumns(10);
-		
+
 		btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.addActionListener(this);
 		btnAdicionar.setBounds(300, 40, 225, 23);
@@ -82,7 +83,7 @@ public class Problema_6_1 extends JFrame implements ActionListener {
 		btnEliminarTodo.addActionListener(this);
 		btnEliminarTodo.setBounds(300, 100, 225, 23);
 		contentPane.add(btnEliminarTodo);
-		
+
 		btnIncrementarPrimeraEdadAdulta = new JButton("Incrementar primera edad adulta");
 		btnIncrementarPrimeraEdadAdulta.addActionListener(this);
 		btnIncrementarPrimeraEdadAdulta.setBounds(300, 130, 225, 23);
@@ -121,42 +122,80 @@ public class Problema_6_1 extends JFrame implements ActionListener {
 		limpieza();
 	}
 
+	ArregloEdades ae = new ArregloEdades();
+
 	protected void actionPerformedBtnAdicionar(ActionEvent arg0) {
-		
+		try {
+			ae.adicionar(leerEdad());
+			listar();
+		} catch (Exception e) {
+			mensaje("error de ingreso");
+		}
+
 	}
+
 	protected void actionPerformedBtnEliminarAlFinal(ActionEvent arg0) {
-		
+		if (ae.tamanio() > 0) {
+			ae.eliminarAlFinal();
+			listar();
+		} else
+			mensaje("el Arreglo está vacío");
 	}
+
 	protected void actionPerformedBtnEliminarTodo(ActionEvent arg0) {
-		
+		if (ae.tamanio() > 0) {
+			ae.eliminarTodo();
+			txtS.setText("");
+		} else
+			mensaje("el Arreglo está vacío");
 	}
+
 	protected void actionPerformedBtnIncrementarPrimeraEdadAdulta(ActionEvent arg0) {
-		
+		if (ae.tamanio() > 0) {
+			ae.incrementarPrimeraEdadAdulta();
+			listar();
+		} else
+			mensaje("el Arreglo está vacío");
 	}
+
 	protected void actionPerformedBtnRemplazarPrimeraEdadAdulta(ActionEvent arg0) {
-		
+		if (ae.tamanio() > 0) {
+			ae.remplazarPrimeraEdadAdulta();
+			;
+			listar();
+		} else
+			mensaje("el Arreglo está vacío");
 	}
-	//  M�todos tipo void (sin par�metros)
+
+	// Métodos tipo void (sin parámetros)
 	void imprimir() {
 		imprimir("");
 	}
+
 	void limpieza() {
 		txtEdad.setText("");
 		txtEdad.requestFocus();
 	}
-	void listar() {
 
+	void listar() {
+		txtS.setText("");
+		for (int i = 0; i < ae.tamanio(); i++) {
+			imprimir("n[" + i + "] : " + ae.obtener(i));
+		}
 	}
-	//  M�todos tipo void (con par�metros)
+
+	// Métodos tipo void (con parámetros)
 	void imprimir(String s) {
 		txtS.append(s + "\n");
 	}
+
 	void mensaje(String s) {
 		JOptionPane.showMessageDialog(this, s);
 	}
-	//  M�todos que retornan valor (sin par�metros)
-	int leerEdad()  {
+
+	// Métodos que retornan valor (sin parámetros)
+	int leerEdad() {
 		return Integer.parseInt(txtEdad.getText().trim());
 	}
-	
+
 }
