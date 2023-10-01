@@ -1,5 +1,7 @@
 package gui;
 
+import semana_06.ArregloNotas;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,9 +17,10 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.UIManager;
 
 public class Problema_6_2 extends JFrame implements ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
@@ -38,10 +41,10 @@ public class Problema_6_2 extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					Problema_6_2 frame = new Problema_6_2();
 					frame.setVisible(true);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -78,7 +81,7 @@ public class Problema_6_2 extends JFrame implements ActionListener {
 		btnEliminarAlFinal.addActionListener(this);
 		btnEliminarAlFinal.setBounds(280, 70, 265, 23);
 		contentPane.add(btnEliminarAlFinal);
-		
+
 		btnEliminarTodo = new JButton("Eliminar todo");
 		btnEliminarTodo.addActionListener(this);
 		btnEliminarTodo.setBounds(280, 100, 265, 23);
@@ -93,7 +96,7 @@ public class Problema_6_2 extends JFrame implements ActionListener {
 		btnRemplazarUltimaNotaDesaprobatoria.addActionListener(this);
 		btnRemplazarUltimaNotaDesaprobatoria.setBounds(280, 160, 265, 23);
 		contentPane.add(btnRemplazarUltimaNotaDesaprobatoria);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 40, 260, 412);
 		contentPane.add(scrollPane);
@@ -122,42 +125,85 @@ public class Problema_6_2 extends JFrame implements ActionListener {
 		limpieza();
 	}
 
+	ArregloNotas an = new ArregloNotas();
+
 	protected void actionPerformedBtnAdicionar(ActionEvent arg0) {
+		try {
+			an.adicionar(leerNota());
+			listar();
+		} catch (Exception e) {
+			mensaje("error de ingreso");
+		}
 
 	}
+
 	protected void actionPerformedBtnEliminarAlFinal(ActionEvent arg0) {
-	
+		if (an.tamanio() > 0) {
+			an.eliminarAlFinal();
+			listar();
+		} else
+			mensaje("el Arreglo está vacío");
+
 	}
+
 	protected void actionPerformedBtnEliminarTodo(ActionEvent arg0) {
-		
+		if (an.tamanio() > 0) {
+			an.eliminarTodo();
+			txtS.setText("");
+		} else
+			mensaje("el Arreglo está vacío");
+
 	}
+
 	protected void actionPerformedBtnDecrementarUltimaNotaDesaprobatoria(ActionEvent arg0) {
-	
+		if (an.tamanio() > 0) {
+			an.decrementarUltimaNotaDesaprobatoria();
+			listar();
+		} else
+			mensaje("el Arreglo está vacío");
+
 	}
+
 	protected void actionPerformedBtnRemplazarUltimaNotaDesaprobatoria(ActionEvent arg0) {
-	
+		if (an.tamanio() > 0) {
+			an.remplazarUltimaNotaDesaprobatoria();
+			;
+			listar();
+		} else
+			mensaje("el Arreglo está vacío");
+
 	}
-	//  M�todos tipo void (sin par�metros)
+
+	// M�todos tipo void (sin par�metros)
 	void imprimir() {
 		imprimir("");
 	}
+
 	void limpieza() {
 		txtNota.setText("");
 		txtNota.requestFocus();
 	}
+
 	void listar() {
+		txtS.setText("");
+		for (int i = 0; i < an.tamanio(); i++) {
+			imprimir("n[" + i + "] : " + an.obtener(i));
+		}
 
 	}
-	//  M�todos tipo void (con par�metros)
+
+	// M�todos tipo void (con par�metros)
 	void imprimir(String s) {
 		txtS.append(s + "\n");
 	}
+
 	void mensaje(String s) {
 		JOptionPane.showMessageDialog(this, s);
 	}
-	//  M�todos que retornan valor (sin par�metros)
-	int leerNota()  {
+
+	// M�todos que retornan valor (sin par�metros)
+	int leerNota() {
 		return Integer.parseInt(txtNota.getText().trim());
 	}
-	
+
 }
