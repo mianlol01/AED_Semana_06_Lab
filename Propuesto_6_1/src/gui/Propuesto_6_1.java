@@ -1,5 +1,7 @@
 package gui;
 
+import semana_06.ArregloTemperaturas;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,9 +16,10 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.UIManager;
 
 public class Propuesto_6_1 extends JFrame implements ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
@@ -37,10 +40,10 @@ public class Propuesto_6_1 extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					Propuesto_6_1 frame = new Propuesto_6_1();
 					frame.setVisible(true);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -67,7 +70,7 @@ public class Propuesto_6_1 extends JFrame implements ActionListener {
 		txtTemperatura.setBounds(95, 10, 86, 23);
 		contentPane.add(txtTemperatura);
 		txtTemperatura.setColumns(10);
-		
+
 		btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.addActionListener(this);
 		btnAdicionar.setBounds(290, 40, 261, 23);
@@ -82,17 +85,17 @@ public class Propuesto_6_1 extends JFrame implements ActionListener {
 		btnEliminarTodo.addActionListener(this);
 		btnEliminarTodo.setBounds(290, 100, 261, 23);
 		contentPane.add(btnEliminarTodo);
-		
+
 		btnIncrementarTemperaturas = new JButton("Incrementar temperaturas");
 		btnIncrementarTemperaturas.addActionListener(this);
 		btnIncrementarTemperaturas.setBounds(290, 130, 261, 23);
 		contentPane.add(btnIncrementarTemperaturas);
-		
+
 		btnRemplazarPrimeraTemperaturaNormal = new JButton("Remplazar primera temperatura normal");
 		btnRemplazarPrimeraTemperaturaNormal.addActionListener(this);
 		btnRemplazarPrimeraTemperaturaNormal.setBounds(290, 160, 261, 23);
 		contentPane.add(btnRemplazarPrimeraTemperaturaNormal);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 40, 275, 412);
 		contentPane.add(scrollPane);
@@ -121,42 +124,85 @@ public class Propuesto_6_1 extends JFrame implements ActionListener {
 		limpieza();
 	}
 
+	ArregloTemperaturas at = new ArregloTemperaturas();
+
 	protected void actionPerformedBtnAdicionar(ActionEvent arg0) {
+		try {
+			at.adicionar(leerTemperatura());
+			listar();
+		} catch (Exception e) {
+			mensaje("error de ingreso");
+		}
 
 	}
+
 	protected void actionPerformedBtnEliminarAlFinal(ActionEvent arg0) {
+		if (at.tamanio() > 0) {
+			at.eliminarAlFinal();
+			listar();
+		} else
+			mensaje("el Arreglo estÃ¡ vacÃ­o");
 
 	}
+
 	protected void actionPerformedBtnEliminarTodo(ActionEvent arg0) {
+		if (at.tamanio() > 0) {
+			at.eliminarTodo();
+			txtS.setText("");
+		} else
+			mensaje("el Arreglo estÃ¡ vacÃ­o");
 
 	}
+
 	protected void actionPerformedBtnRemplazarPrimeraTemperaturaNormal(ActionEvent arg0) {
+		if (at.tamanio() > 0) {
+			at.remplazarPrimeraTemperaturaNormal();
+			;
+			listar();
+		} else
+			mensaje("el Arreglo estÃ¡ vacÃ­o");
 
 	}
+
 	protected void actionPerformedBtnIncrementarTemperaturas(ActionEvent arg0) {
-	
+		if (at.tamanio() > 0) {
+			at.incrementarTemperaturas();
+			listar();
+		} else
+			mensaje("el Arreglo estÃ¡ vacÃ­o");
+
 	}
-	//  Métodos tipo void (sin parámetros)
+
+	// Métodos tipo void (sin parámetros)
 	void imprimir() {
 		imprimir("");
 	}
+
 	void limpieza() {
 		txtTemperatura.setText("");
 		txtTemperatura.requestFocus();
 	}
+
 	void listar() {
+		txtS.setText("");
+		for (int i = 0; i < at.tamanio(); i++) {
+			imprimir("n[" + i + "] : " + at.obtener(i));
+		}
 
 	}
-	//  Métodos tipo void (con parámetros)
+
+	// Métodos tipo void (con parámetros)
 	void imprimir(String s) {
 		txtS.append(s + "\n");
 	}
+
 	void mensaje(String s) {
 		JOptionPane.showMessageDialog(this, s);
 	}
-	//  Métodos que retornan valor (sin parámetros)
-	double leerTemperatura()  {
+
+	// Métodos que retornan valor (sin parámetros)
+	double leerTemperatura() {
 		return Double.parseDouble(txtTemperatura.getText().trim());
 	}
-	
+
 }
